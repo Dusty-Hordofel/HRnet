@@ -8,6 +8,9 @@ import CustomInput from "../../components/ui/CustomInput";
 import States from "../../assets/data/States.json";
 import Departments from "../../assets/data/Departments.json";
 import Dropdown from "../../components/ui/Dropdown";
+import { useState } from "react";
+import Modal from "akcel-ui";
+
 
 const formatDateLocaly = (data: string) => {
     const date = new Date(data);
@@ -21,6 +24,20 @@ const Home = () => {
         handleSubmit,
         formState: { errors },
     } = useForm();
+
+    const [modalReset, setModalReset] = useState(false);
+    const [displayModal, setDisplayModal] = useState(true);
+    const modalParameter = {
+        backgroundColor: "#1B1919",
+        boxShadow: "0 0 5px #1B1919",
+        color: "#FFFFFF",
+        fontSize: 18,
+        height: "fit-content",
+        padding: "20px 50px",
+        width: "fit-content",
+    };
+
+
 
 
 
@@ -38,17 +55,19 @@ const Home = () => {
         const { formattedDate: begin } = formatDateLocaly(startdate);
         const { formattedDate: birth } = formatDateLocaly(dateOfBirth);
 
+
+
         const employee =
         {
-            "First name": firstName,
-            "Last name": lastName,
-            "Date of birth": birth,
-            "Start date": begin,
-            "State": states,
-            "ZIP code": code,
-            "Street": street,
-            "City": city,
-            "Department": departments
+            "first_name": firstName,
+            "last_name": lastName,
+            "date_of_birth": birth,
+            "start_date": begin,
+            "state": states,
+            "zip_code": code,
+            "street": street,
+            "city": city,
+            "department": departments
         }
 
         /* Get the list of current employees */
@@ -63,9 +82,17 @@ const Home = () => {
     return (
         <div className="flex justify-center min-h-screen pt-10">
             <div className="flex flex-col max-w-[532px] px-9 w-full">
+                <Modal
+                    key={modalReset}
+                    id="modal-created"
+                    showModal={displayModal}
+                    closeModal={() => setDisplayModal(false)}
+                    parameter={modalParameter}
+                    message="Employee Created !"
+                />
                 <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
                     <div className="flex flex-col gap-4">
-                        <p className="text-2xl font-bold mb-2">Informations</p>
+                        <p className="mb-2 text-2xl font-bold">Informations</p>
                         <div className="flex gap-4 ">
                             <CustomInput
                                 name="lastName"
@@ -99,7 +126,7 @@ const Home = () => {
                                             <DatePicker
                                                 onChange={onChange}
                                                 value={value ? new Date(value) : null}
-                                                className="w-full bg-white rounded border border-black"
+                                                className="w-full bg-white border border-black rounded"
                                             // locale={fr}
                                             />
                                         </LocalizationProvider>
@@ -117,7 +144,7 @@ const Home = () => {
                                             <DatePicker
                                                 onChange={onChange}
                                                 value={value ? new Date(value) : null}
-                                                className="w-full bg-white rounded border border-black"
+                                                className="w-full bg-white border border-black rounded"
                                             // locale={fr}
                                             />
                                         </LocalizationProvider>
@@ -127,7 +154,7 @@ const Home = () => {
                         </div>
                     </div>
                     <div>
-                        <p className="text-2xl font-bold mb-2">Address</p>
+                        <p className="mb-2 text-2xl font-bold">Address</p>
 
                         <div className="flex gap-4 ">
                             <div>
@@ -152,7 +179,7 @@ const Home = () => {
                         </div>
                     </div>
                     <div>
-                        <p className="text-2xl font-bold mb-2">Address</p>
+                        <p className="mb-2 text-2xl font-bold">Address</p>
                         <div className="flex gap-4 ">
                             <CustomInput
                                 name="street"
@@ -176,7 +203,7 @@ const Home = () => {
                         </div>
                     </div>
                     <div>
-                        <p className="text-2xl font-bold mb-4">Department</p>
+                        <p className="mb-4 text-2xl font-bold">Department</p>
                         <div>
                             <span>Department :</span>
                             <Dropdown
@@ -189,7 +216,7 @@ const Home = () => {
                         </div>
                     </div>
 
-                    <button type="submit" className="bg-black  text-white px-14 py-4 rounded w-full">Save</button>
+                    <button type="submit" className="w-full py-4 text-white bg-black rounded px-14">Save</button>
 
                 </form>
             </div>

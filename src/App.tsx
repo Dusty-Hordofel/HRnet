@@ -3,8 +3,9 @@ import './App.css'
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from './components/Layout';
+import List from './pages/List/List';
 
-const Home = lazy(() => import("./pages/home/Home"));
+const Home = lazy(() => import("./pages/Home/Home"));
 
 function App() {
 
@@ -14,6 +15,7 @@ function App() {
         <Suspense>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/list" element={<List />} />
           </Routes>
         </Suspense>
       </Layout>

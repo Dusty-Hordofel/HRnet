@@ -15,6 +15,7 @@ function App() {
         <Suspense>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/create" element={<Home />} />
             <Route path="/list" element={<List />} />
           </Routes>
         </Suspense>

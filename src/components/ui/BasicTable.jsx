@@ -7,83 +7,11 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import mDta from "../MOCK_DATA.json";
-import { DateTime } from "luxon";
 
-const BasicTable = () => {
+const BasicTable = ({ data, columns }) => {
+  console.log("🚀 ~ file: BasicTable.jsx:14 ~ BasicTable ~ data:", data);
   const [sorting, setSorting] = useState([]);
   const [filtering, setFiltering] = useState("");
-
-  /* 
-{
-  "id": 1,
-  "first_name": "Isador",
-  "last_name": "Kruger",
-  "email": "ikruger0@huffingtonpost.com",
-  "gender": "Male",
-  "dob": "2023-04-28T11:19:35Z"
-}
-*/
-
-  const data = React.useMemo(() => mDta, []); //we use the useMemo hook to memoize the data
-  //columns definition
-  const columns = [
-    {
-      Header: "ID",
-      accessorKey: "id",
-      footer: "ID",
-    },
-    {
-      header: "Name",
-      columns: [
-        {
-          Header: "First ",
-          accessorKey: "first_name",
-          footer: "ID",
-        },
-        {
-          Header: "Last ",
-          accessorKey: "last_name",
-          footer: "ID",
-        },
-      ],
-      //   footer: "ID",
-    },
-    // {
-    //   header: "Name",
-    //   accessorFn: (row) => `${row.first_name} ${row.last_name}`,
-    //   //   footer: "ID",
-    // },
-    // {
-    //   Header: "First Name",
-    //   accessorKey: "first_name",
-    //   footer: "ID",
-    // },
-    // {
-    //   Header: "Last Name",
-    //   accessorKey: "last_name",
-    //   footer: "ID",
-    // },
-    {
-      Header: "Email",
-      accessorKey: "email",
-      footer: "ID",
-    },
-    {
-      Header: "Gender",
-      accessorKey: "gender",
-      footer: "ID",
-    },
-    {
-      Header: "Date of Birth",
-      accessorKey: "dob",
-      footer: "ID",
-      cell: (info) => {
-        const date = DateTime.fromISO(info.getValue());
-        return date.toLocaleString(DateTime.DATE_MED);
-      },
-    },
-  ];
 
   //create a table instance
   const table = useReactTable({
@@ -99,7 +27,8 @@ const BasicTable = () => {
     },
     onSortingChange: setSorting,
     onGlobalFilterChange: setFiltering,
-  }); //takes three arguments: data and columns
+  });
+
   return (
     <div className="w3-container">
       <input

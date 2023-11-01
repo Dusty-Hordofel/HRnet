@@ -9,7 +9,9 @@ import States from "../../assets/data/States.json";
 import Departments from "../../assets/data/Departments.json";
 import Dropdown from "../../components/ui/Dropdown";
 import { useState } from "react";
-import Modal from "akcel-ui";
+import { Modal } from "hordofel-ui"
+import { SignUpFormSchema, SignUpFormValues } from "../../validators/schema-validator";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 
 const formatDateLocaly = (data: string) => {
@@ -23,22 +25,11 @@ const Home = () => {
         control,
         handleSubmit,
         formState: { errors },
-    } = useForm();
+        reset
+    } = useForm/*<SignUpFormValues>*/(/*{ resolver: zodResolver(SignUpFormSchema) }*/);
 
     const [modalReset, setModalReset] = useState(false);
-    const [displayModal, setDisplayModal] = useState(true);
-    const modalParameter = {
-        backgroundColor: "#1B1919",
-        boxShadow: "0 0 5px #1B1919",
-        color: "#FFFFFF",
-        fontSize: 18,
-        height: "fit-content",
-        padding: "20px 50px",
-        width: "fit-content",
-    };
-
-
-
+    const [displayModal, setDisplayModal] = useState(false);
 
 
     const onSubmit = ({
@@ -52,6 +43,7 @@ const Home = () => {
         street,
         city
     }: FieldValues) => {
+        console.log("🚀 ~ file: Home.tsx:43 ~ Home ~ firstName:", firstName, dateOfBirth, departments)
         const { formattedDate: begin } = formatDateLocaly(startdate);
         const { formattedDate: birth } = formatDateLocaly(dateOfBirth);
 
@@ -77,19 +69,21 @@ const Home = () => {
         employees.push(employee);
         /* Save the list of employees in the local storage */
         localStorage.setItem("employees", JSON.stringify(employees));
+        setDisplayModal(true);
+        reset()
+
     };
 
     return (
         <div className="flex justify-center min-h-screen pt-10">
             <div className="flex flex-col max-w-[532px] px-9 w-full">
-                <Modal
-                    key={modalReset}
-                    id="modal-created"
-                    showModal={displayModal}
-                    closeModal={() => setDisplayModal(false)}
-                    parameter={modalParameter}
-                    message="Employee Created !"
-                />
+                <Modal showModal={displayModal}>
+                    <p className="text-lg text-white">Employee Created !</p>
+                    <span className="absolute block text-xs text-white cursor-pointer right-3 top-3 icon" onClick={() => setDisplayModal(false)}>
+                        Close
+                    </span>
+                </Modal>
+
                 <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
                     <div className="flex flex-col gap-4">
                         <p className="mb-2 text-2xl font-bold">Informations</p>
@@ -127,7 +121,6 @@ const Home = () => {
                                                 onChange={onChange}
                                                 value={value ? new Date(value) : null}
                                                 className="w-full bg-white border border-black rounded"
-                                            // locale={fr}
                                             />
                                         </LocalizationProvider>
                                     )}

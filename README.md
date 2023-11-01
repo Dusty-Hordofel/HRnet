@@ -260,7 +260,19 @@ export default Home;
 
 ### 3. Modal Package
 
+- create [Modal Package]() on [hordofel-ui library ]()
+- use [hordofel-ui library ]() on [HomePage]()
+
 ### 4. Employees table
 
--
-- create [employee table]() using [mui]()
+- install [react-table](https://tanstack.com/table/v8/docs/guide/installation)
+
+```bash
+$ npm install @tanstack/react-table
+```
+
+- create [BasicTable](/Users/dustyhordofelbamana/Documents/GitHub/wealth/src/components/BasicTable.jsx)
+
+```jsx
+
+```

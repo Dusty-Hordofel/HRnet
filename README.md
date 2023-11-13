@@ -1,3 +1,7 @@
+# Project 14: HRNET
+
+## Purpose:
+
 ### 1. Header
 
 - create [Header](src/components/header/Header.tsx)
@@ -489,3 +493,9 @@ const List = () => {
 
 export default List;
 ```
+
+## Section 2: Performance
+
+### 6. Compare Performance
+
+- add [Lighthouse repport](lighthouse-repport) for performance.

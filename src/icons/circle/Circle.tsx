@@ -7,6 +7,7 @@ const Circle = (props: SVGAttributes<HTMLOrSVGElement>) => (
         viewBox="0 0 512 512"
         strokeLinecap="round"
         className="animate-spin"
+        {...props}
     >
         <title>Circle</title>
         <circle cx="256" cy="256" r="200" fill="transparent" strokeWidth="35" stroke="lightgray" />

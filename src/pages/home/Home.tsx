@@ -10,8 +10,9 @@ import Departments from "../../assets/data/Departments.json";
 import Dropdown from "../../components/ui/Dropdown";
 import { useState } from "react";
 import { Modal } from "hordofel-ui"
-import { SignUpFormSchema, SignUpFormValues } from "../../validators/schema-validator";
-import { zodResolver } from "@hookform/resolvers/zod";
+import Dates from "../../components/ui/Dates";
+// import { SignUpFormSchema, SignUpFormValues } from "../../validators/schema-validator";
+// import { zodResolver } from "@hookform/resolvers/zod";
 
 
 const formatDateLocaly = (data: string) => {
@@ -19,6 +20,8 @@ const formatDateLocaly = (data: string) => {
     const formattedDate = format(date, "dd/MM/yyyy", { locale: fr });
     return { formattedDate };
 };
+
+
 const Home = () => {
     const {
         register,
@@ -28,7 +31,7 @@ const Home = () => {
         reset
     } = useForm/*<SignUpFormValues>*/(/*{ resolver: zodResolver(SignUpFormSchema) }*/);
 
-    const [modalReset, setModalReset] = useState(false);
+    // const [modalReset, setModalReset] = useState(false);
     const [displayModal, setDisplayModal] = useState(false);
 
 
@@ -43,11 +46,9 @@ const Home = () => {
         street,
         city
     }: FieldValues) => {
-        console.log("🚀 ~ file: Home.tsx:43 ~ Home ~ firstName:", firstName, dateOfBirth, departments)
         const { formattedDate: begin } = formatDateLocaly(startdate);
         const { formattedDate: birth } = formatDateLocaly(dateOfBirth);
-
-
+        console.log("🚀 ~ file: Home.tsx:43 ~ Home ~ firstName:", begin, firstName, birth, departments)
 
         const employee =
         {
@@ -111,38 +112,42 @@ const Home = () => {
                         <div className="flex gap-4">
                             <div className="flex flex-col">
                                 <p>Date Of Birth :</p>
-                                <Controller
-                                    control={control}
-                                    name="dateOfBirth"
-                                    defaultValue={new Date()} // Set the initial value to the current date
-                                    render={({ field: { onChange, value } }) => (
-                                        <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                            <DatePicker
-                                                onChange={onChange}
-                                                value={value ? new Date(value) : null}
-                                                className="w-full bg-white border border-black rounded"
-                                            />
-                                        </LocalizationProvider>
-                                    )}
-                                />
+                                <Dates>
+                                    <Controller
+                                        control={control}
+                                        name="dateOfBirth"
+                                        defaultValue={new Date()} // Set the initial value to the current date
+                                        render={({ field: { onChange, value } }) => (
+                                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                                <DatePicker
+                                                    onChange={onChange}
+                                                    value={value ? new Date(value) : null}
+                                                    className="w-full bg-white border border-black rounded"
+                                                />
+                                            </LocalizationProvider>
+                                        )}
+                                    />
+                                </Dates>
                             </div>
                             <div className="flex flex-col">
                                 <p>Start date :</p>
-                                <Controller
-                                    control={control}
-                                    name="startdate"
-                                    defaultValue={new Date()} // Set the initial value to the current date
-                                    render={({ field: { onChange, value } }) => (
-                                        <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                            <DatePicker
-                                                onChange={onChange}
-                                                value={value ? new Date(value) : null}
-                                                className="w-full bg-white border border-black rounded"
-                                            // locale={fr}
-                                            />
-                                        </LocalizationProvider>
-                                    )}
-                                />
+                                <Dates>
+                                    <Controller
+                                        control={control}
+                                        name="startdate"
+                                        defaultValue={new Date()} // Set the initial value to the current date
+                                        render={({ field: { onChange, value } }) => (
+                                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                                <DatePicker
+                                                    onChange={onChange}
+                                                    value={value ? new Date(value) : null}
+                                                    className="w-full bg-white border border-black rounded"
+                                                // locale={fr}
+                                                />
+                                            </LocalizationProvider>
+                                        )}
+                                    />
+                                </Dates>
                             </div>
                         </div>
                     </div>
@@ -218,3 +223,6 @@ const Home = () => {
 };
 
 export default Home;
+
+
+

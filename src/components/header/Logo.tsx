@@ -1,13 +1,10 @@
 import { FC } from "react";
 import { Link } from "react-router-dom";
-import styles from "./logo.module.scss";
 
 const Logo: FC<React.ImgHTMLAttributes<HTMLImageElement>> = ({
     src,
     alt,
     title,
-    width,
-    height,
     className,
     style,
     onClick,

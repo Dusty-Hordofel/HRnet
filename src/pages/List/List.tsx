@@ -6,22 +6,22 @@ const List = () => {
     const employeesColumns = [
         {
             Header: "First Name",
-            accessorKey: "first_name",
+            accessorKey: "firstName",
             footer: "ID",
         },
         {
             Header: "Last Name",
-            accessorKey: "last_name",
+            accessorKey: "lastName",
             footer: "ID",
         },
         {
             Header: "Start Date",
-            accessorKey: "start_date",
+            accessorKey: "startDate",
             footer: "ID",
         },
         {
             Header: "Date of Birth",
-            accessorKey: "date_of_birth",
+            accessorKey: "dateOfBirth",
             footer: "ID",
         },
         {
@@ -46,7 +46,7 @@ const List = () => {
         },
         {
             Header: "Zip Code",
-            accessorKey: "zip_code",
+            accessorKey: "zipCode",
             footer: "ID",
         },
     ]

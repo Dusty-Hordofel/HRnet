@@ -1,77 +1,82 @@
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { format } from "date-fns";
-import { fr } from "date-fns/locale";
-import { useForm, Controller, FieldValues } from "react-hook-form";
-import CustomInput from "../../components/ui/CustomInput";
-import States from "../../assets/data/States.json";
-import Departments from "../../assets/data/Departments.json";
-import Dropdown from "../../components/ui/Dropdown";
+import { useForm, FieldValues } from "react-hook-form";
 import { useState } from "react";
 import { Modal } from "hordofel-ui"
-import Dates from "../../components/ui/Dates";
-// import { SignUpFormSchema, SignUpFormValues } from "../../validators/schema-validator";
-// import { zodResolver } from "@hookform/resolvers/zod";
+import { States } from "../../data/States";
+import { Departments } from "../../data/Departments";
+import { EmployeeType } from "../../types";
+import { employeeSchema } from "../../schemas/employeeSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Input from "../../components/ui/Input";
+import Select from "../../components/ui/Select";
+import { useEmployeesContext } from "../../context/EmployeesContext";
+import { formatCustomDate } from "../../lib/utils";
 
 
-const formatDateLocaly = (data: string) => {
-    const date = new Date(data);
-    const formattedDate = format(date, "dd/MM/yyyy", { locale: fr });
-    return { formattedDate };
-};
+
 
 
 const Home = () => {
     const {
         register,
-        control,
         handleSubmit,
         formState: { errors },
         reset
-    } = useForm/*<SignUpFormValues>*/(/*{ resolver: zodResolver(SignUpFormSchema) }*/);
+    } = useForm<EmployeeType>({ resolver: zodResolver(employeeSchema) });
 
-    // const [modalReset, setModalReset] = useState(false);
     const [displayModal, setDisplayModal] = useState(false);
+    const [employeeAlreadyExist, setEmployeeAlreadyExist] = useState(false);
+
+
+
+    const { addEmployee, employees } = useEmployeesContext();
 
 
     const onSubmit = ({
-        startdate,
+        startDate,
         firstName,
         lastName,
         dateOfBirth,
-        states,
-        departments,
-        code,
+        state,
+        department,
+        zipCode,
         street,
         city
     }: FieldValues) => {
-        const { formattedDate: begin } = formatDateLocaly(startdate);
-        const { formattedDate: birth } = formatDateLocaly(dateOfBirth);
-        console.log("🚀 ~ file: Home.tsx:43 ~ Home ~ firstName:", begin, firstName, birth, departments)
+        console.log("🚀 ~ file: Home.tsx:45 ~ Home ~ dateOfBirth:", formatCustomDate(dateOfBirth))
 
-        const employee =
+
+
+        const employee: any =
         {
-            "first_name": firstName,
-            "last_name": lastName,
-            "date_of_birth": birth,
-            "start_date": begin,
-            "state": states,
-            "zip_code": code,
+            "firstName": firstName,
+            "lastName": lastName,
+            "dateOfBirth": formatCustomDate(dateOfBirth),
+            "startDate": formatCustomDate(startDate),
+            "state": state,
+            "zipCode": zipCode,
             "street": street,
             "city": city,
-            "department": departments
+            "department": department
         }
 
-        /* Get the list of current employees */
-        const storedData = localStorage.getItem("employees");
-        const employees = storedData ? JSON.parse(storedData) : [];
-        /* Add the employee to the list */
-        employees.push(employee);
-        /* Save the list of employees in the local storage */
-        localStorage.setItem("employees", JSON.stringify(employees));
-        setDisplayModal(true);
-        reset()
+
+        //verify if the employee already exist
+        const isEmployeeInTheContext = employees.some((item) => {
+            return JSON.stringify(item) === JSON.stringify(employee);
+        });
+
+        //if the employee doesn't exist, add it to the context
+        if (isEmployeeInTheContext === false) {
+            setEmployeeAlreadyExist(false);
+            addEmployee(employee);
+            setDisplayModal(true);
+            // reset();
+        } else {
+            //if the employee already exist, display a message
+            setEmployeeAlreadyExist(true);
+            setDisplayModal(false);
+            console.log("🚀 ~ file: Home.tsx:28 ~ Home ~ employeeAlreadyExist:", employeeAlreadyExist)
+        }
 
     };
 
@@ -89,130 +94,72 @@ const Home = () => {
                     <div className="flex flex-col gap-4">
                         <p className="mb-2 text-2xl font-bold">Informations</p>
                         <div className="flex gap-4 ">
-                            <CustomInput
-                                name="lastName"
-                                placeholder="LastName"
-                                errors={errors}
-                                register={register}
-                                isReactHookForm
-                                type="text"
-                                label="LastName"
-                                className=""
+                            <Input
+                                {...register('firstName')}
+                                label="First name"
+                                error={errors.firstName?.message}
                             />
-                            <CustomInput
-                                name="firstName"
-                                placeholder="FirstName"
-                                errors={errors}
-                                register={register}
-                                isReactHookForm
-                                type="text"
-                                label="FirstName"
+                            <Input
+                                {...register('lastName')}
+                                label="Last name"
+                                error={errors.lastName?.message}
                             />
                         </div>
                         <div className="flex gap-4">
-                            <div className="flex flex-col">
-                                <p>Date Of Birth :</p>
-                                <Dates>
-                                    <Controller
-                                        control={control}
-                                        name="dateOfBirth"
-                                        defaultValue={new Date()} // Set the initial value to the current date
-                                        render={({ field: { onChange, value } }) => (
-                                            <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                                <DatePicker
-                                                    onChange={onChange}
-                                                    value={value ? new Date(value) : null}
-                                                    className="w-full bg-white border border-black rounded"
-                                                />
-                                            </LocalizationProvider>
-                                        )}
-                                    />
-                                </Dates>
-                            </div>
-                            <div className="flex flex-col">
-                                <p>Start date :</p>
-                                <Dates>
-                                    <Controller
-                                        control={control}
-                                        name="startdate"
-                                        defaultValue={new Date()} // Set the initial value to the current date
-                                        render={({ field: { onChange, value } }) => (
-                                            <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                                <DatePicker
-                                                    onChange={onChange}
-                                                    value={value ? new Date(value) : null}
-                                                    className="w-full bg-white border border-black rounded"
-                                                // locale={fr}
-                                                />
-                                            </LocalizationProvider>
-                                        )}
-                                    />
-                                </Dates>
-                            </div>
+                            <Input
+                                {...register('dateOfBirth', { valueAsDate: true })}
+                                type="date"
+                                label="Date of birth"
+                                error={errors.dateOfBirth?.message}
+                            />
+                            <Input
+                                {...register('startDate', { valueAsDate: true })}
+                                type="date"
+                                label="Start date"
+                                error={errors.startDate?.message}
+                            />
                         </div>
                     </div>
                     <div>
                         <p className="mb-2 text-2xl font-bold">Address</p>
 
                         <div className="flex gap-4 ">
-                            <div>
-                                <span>States :</span>
-                                <Dropdown
-                                    register={register}
-                                    name="states"
-                                    errors={errors}
-                                    optionsList={States}
-                                    className="w-full"
-                                />
-                            </div>
-                            <CustomInput
-                                name="code"
-                                placeholder="Your zip code"
-                                errors={errors}
-                                register={register}
-                                isReactHookForm
+                            <Select
+                                {...register('state')}
+                                label="State"
+                                error={errors.state?.message}
+                                options={States}
+                            />
+                            <Input
+                                {...register('zipCode', { valueAsNumber: true })}
                                 type="number"
-                                label="Zip Code"
+                                label="Zip code"
+                                error={errors.zipCode?.message}
                             />
                         </div>
                     </div>
                     <div>
                         <p className="mb-2 text-2xl font-bold">Address</p>
                         <div className="flex gap-4 ">
-                            <CustomInput
-                                name="street"
-                                placeholder="Your street name"
-                                errors={errors}
-                                register={register}
-                                isReactHookForm
-                                type="text"
+                            <Input
+                                {...register('street')}
                                 label="Street"
-                                className=""
+                                error={errors.street?.message}
                             />
-                            <CustomInput
-                                name="city"
-                                placeholder="Your city name"
-                                errors={errors}
-                                register={register}
-                                isReactHookForm
-                                type="text"
+                            <Input
+                                {...register('city')}
                                 label="City"
+                                error={errors.city?.message}
                             />
                         </div>
                     </div>
-                    <div>
-                        <p className="mb-4 text-2xl font-bold">Department</p>
-                        <div>
-                            <span>Department :</span>
-                            <Dropdown
-                                register={register}
-                                name="departments"
-                                errors={errors}
-                                optionsList={Departments}
-                                className="w-full"
-                            />
-                        </div>
-                    </div>
+
+                    <Select
+                        {...register('department')}
+                        label="Department"
+                        error={errors.department?.message}
+                        options={Departments}
+                    />
 
                     <button type="submit" className="w-full py-4 text-white bg-black rounded px-14">Save</button>
 
@@ -223,6 +170,7 @@ const Home = () => {
 };
 
 export default Home;
+
 
 
 

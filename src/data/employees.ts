@@ -4,8 +4,14 @@ export const employees: EmployeesType = [
   {
     firstName: "Alice",
     lastName: "Johnson",
-    dateOfBirth: new Date("1990-05-12"),
-    startDate: new Date("2021-01-15"),
+    // dateOfBirth: new Date("1990-05-12"),
+    dateOfBirth: new Date(
+      "Sat May 12 1990 02:00:00 GMT+0200 (Central European Summer Time)"
+    ),
+    startDate: new Date(
+      "Fri Jan 15 2021 01:00:00 GMT+0100 (Central European Standard Time)"
+    ),
+    // startDate: new Date("2021-01-15"),
     street: "123 Oak Street",
     city: "Seattle",
     state: "WA",

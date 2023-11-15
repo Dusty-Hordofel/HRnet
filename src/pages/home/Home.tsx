@@ -42,6 +42,7 @@ const Home = () => {
         street,
         city
     }: FieldValues) => {
+        console.log("🚀 ~ file: Home.tsx:45 ~ Home ~ dateOfBirth:", typeof dateOfBirth)
         console.log("🚀 ~ file: Home.tsx:45 ~ Home ~ dateOfBirth:", formatCustomDate(dateOfBirth))
 
 
@@ -170,6 +171,10 @@ const Home = () => {
 };
 
 export default Home;
+
+
+// Wed Jan 16 1963 01:00:00 GMT+0100 (Central European Standard Time)
+// Home.tsx:46 🚀 ~ file: Home.tsx:45 ~ Home ~ dateOfBirth: 16/1/63
 
 
 

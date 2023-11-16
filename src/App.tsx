@@ -1,6 +1,6 @@
 import './App.css'
 import { lazy, Suspense } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 import Layout from './components/Layout';
 
 
@@ -11,7 +11,7 @@ const List = lazy(() => import("./pages/List/List"));
 function App() {
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Layout>
         <Suspense>
           <Routes>
@@ -21,7 +21,7 @@ function App() {
           </Routes>
         </Suspense>
       </Layout>
-    </BrowserRouter>
+    </HashRouter>
   )
 }
 

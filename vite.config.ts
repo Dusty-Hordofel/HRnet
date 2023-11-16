@@ -5,6 +5,7 @@ import { compression } from "vite-plugin-compression2";
 
 export default defineConfig({
   plugins: [react(), compression()],
+  base: "/HRnet/",
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

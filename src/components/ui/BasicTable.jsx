@@ -9,9 +9,9 @@ import {
 } from "@tanstack/react-table";
 
 const BasicTable = ({ data, columns }) => {
-  console.log("🚀 ~ file: BasicTable.jsx:14 ~ BasicTable ~ data:", data);
   const [sorting, setSorting] = useState([]);
   const [filtering, setFiltering] = useState("");
+  const [customPageSize, setCustomPageSize] = useState(10); // nouvel état pour la taille de la page personnalisée
 
   //create a table instance
   const table = useReactTable({
@@ -27,18 +27,40 @@ const BasicTable = ({ data, columns }) => {
     },
     onSortingChange: setSorting,
     onGlobalFilterChange: setFiltering,
+    pageSize: customPageSize, // Mettez à jour la taille de la page
   });
 
   return (
     <div className="w3-container">
-      <input
-        type="text"
-        value={filtering}
-        onChange={(e) => setFiltering(e.target.value)}
-        placeholder="Search..."
-        className="mb-4 w3-input w3-border w3-round"
-      />
-      <table className="w3-table-all">
+      <div className="flex gap-4" style={{ marginBottom: "20px" }}>
+        {/* Champ de texte pour la recherche globale */}
+        <input
+          type="text"
+          value={filtering}
+          onChange={(e) => setFiltering(e.target.value)}
+          placeholder="Search..."
+          className="mb-4 w3-input w3-border w3-round 1fr"
+        />
+        {/* Ajouter le champ de texte pour la taille de la page */}
+        <div className="flex">
+          <input
+            type="number"
+            value={customPageSize}
+            onChange={(e) => setCustomPageSize(parseInt(e.target.value))}
+            placeholder="Rows per page"
+            className="w3-input w3-border w3-round"
+            style={{ marginRight: "20px", width: "80px" }}
+          />
+          {/* Bouton pour appliquer la nouvelle taille de la page */}
+          <button
+            onClick={() => table.setPageSize(customPageSize)}
+            className="px-4 py-2 text-white bg-black rounded w-max"
+          >
+            Apply Custom Page Size
+          </button>
+        </div>
+      </div>
+      <table className="w3-table-all" style={{ marginBottom: "20px" }}>
         {/* table header */}
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -78,48 +100,31 @@ const BasicTable = ({ data, columns }) => {
             </tr>
           ))}
         </tbody>
-
-        {/* <tfoot>
-          {table.getFooterGroups().map((footerGroup) => (
-            <tr key={footerGroup.id}>
-              {footerGroup.headers.map((header) => (
-                <th key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </tfoot> */}
       </table>
       <div className="flex gap-5 p-5 text-white">
         <button
           onClick={() => table.setPageIndex(0)}
-          className="px-4 py-4 text-white bg-black border"
+          className="px-4 py-4 text-white bg-black border rounded"
         >
           First page
         </button>
         <button
           disabled={!table.getCanPreviousPage()}
           onClick={() => table.previousPage()}
-          className="px-4 py-4 text-white bg-black border"
+          className="px-4 py-4 text-white bg-black border rounded"
         >
           Previous page
         </button>
         <button
           disabled={!table.getCanNextPage()}
           onClick={() => table.nextPage()}
-          className="px-4 py-4 text-white bg-black border"
+          className="px-4 py-4 text-white bg-black border rounded"
         >
           Next page
         </button>
         <button
           onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-          className="px-4 py-4 text-white bg-black border"
+          className="px-4 py-4 text-white bg-black border rounded"
         >
           Last page
         </button>

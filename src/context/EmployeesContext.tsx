@@ -1,7 +1,6 @@
 import { PropsWithChildren, createContext, useContext, useEffect, useState } from 'react';
 import { EmployeeType, EmployeesType } from '../types';
-import { employees as defaultEmployees } from '../data/employees';
-
+import { defaultEmployeesValue } from '../lib/utils';
 
 type EmployeesContextProps = {
   employees: EmployeesType;
@@ -16,25 +15,18 @@ export const EmployeesContext = createContext<EmployeesContextProps>({
 });
 
 export const EmployeesProvider = ({ children }: PropsWithChildren) => {
-  const [employees, setEmployees] = useState<EmployeesType>(defaultEmployees);
 
-  console.log("🚀 ~ file: EmployeesContext.tsx:20 ~ EmployeesProvider ~ defaultEmployees:", defaultEmployees)
-
-  // Load data from local storage during component assembly
-  useEffect(() => {
-    const storedEmployees = localStorage.getItem('employees');
-    if (storedEmployees) {
-      setEmployees(JSON.parse(storedEmployees));
-    }
-  }, []);
+  const [employees, setEmployees] = useState<EmployeesType>(defaultEmployeesValue);
 
   // Backup data in local storage whenever employees change
   useEffect(() => {
     localStorage.setItem('employees', JSON.stringify(employees));
+    // console.log("🚀 ~ file: EmployeesContext.tsx:34 ~ addEmployee localStorage~ employees:", employees);
   }, [employees]);
 
   const addEmployee = (newEmployee: EmployeeType) => {
     setEmployees([...employees, newEmployee]);
+    // console.log("🚀 ~ file: EmployeesContext.tsx:38 ~ addEmployee ~ employees:", employees);
   };
 
   return (
@@ -44,7 +36,7 @@ export const EmployeesProvider = ({ children }: PropsWithChildren) => {
   );
 };
 
-//custom hook to access the employees context
+// Custom hook to access the employees context
 export const useEmployeesContext = (): EmployeesContextProps => {
   const context = useContext(EmployeesContext);
 

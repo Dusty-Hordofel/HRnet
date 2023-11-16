@@ -41,7 +41,7 @@ export const employeeSchema = z.object({
   city: z.string().min(2).max(50),
   state: z.string().min(2).max(50),
   zipCode: z
-    .number({ invalid_type_error: "American zip code is 5-digit" })
+    .number({ invalid_type_error: "Zip code cannot exceed 5-digits" })
     .min(501)
     .max(99950),
   department: z.string().min(2).max(80),

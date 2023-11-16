@@ -10,7 +10,7 @@ import Input from "../../components/ui/Input";
 import Select from "../../components/ui/Select";
 import { useEmployeesContext } from "../../context/EmployeesContext";
 import { formatCustomDate } from "../../lib/utils";
-
+import { Helmet } from "react-helmet";
 
 
 
@@ -42,6 +42,7 @@ const Home = () => {
         street,
         city
     }: FieldValues) => {
+        console.log("🚀 ~ file: Home.tsx:45 ~ Home ~ dateOfBirth:", typeof dateOfBirth)
         console.log("🚀 ~ file: Home.tsx:45 ~ Home ~ dateOfBirth:", formatCustomDate(dateOfBirth))
 
 
@@ -50,8 +51,8 @@ const Home = () => {
         {
             "firstName": firstName,
             "lastName": lastName,
-            "dateOfBirth": formatCustomDate(dateOfBirth),
-            "startDate": formatCustomDate(startDate),
+            "dateOfBirth": dateOfBirth,
+            "startDate": startDate,
             "state": state,
             "zipCode": zipCode,
             "street": street,
@@ -70,7 +71,7 @@ const Home = () => {
             setEmployeeAlreadyExist(false);
             addEmployee(employee);
             setDisplayModal(true);
-            // reset();
+            reset();
         } else {
             //if the employee already exist, display a message
             setEmployeeAlreadyExist(true);
@@ -82,6 +83,17 @@ const Home = () => {
 
     return (
         <div className="flex justify-center min-h-screen pt-10">
+            <Helmet>
+                <meta charSet="utf-8" />
+                <meta name="description" content="RHnet Home Page" />
+                <meta name="keywords" content="form,registration form,RHnet, home, page,registration" />
+                <meta name="author" content="RHnet" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+                <meta name="robots" content="index, follow" />
+                <title>RHnet Home Page</title>
+                <link rel="canonical" href="http://localhost:5174/" />
+            </Helmet>
             <div className="flex flex-col max-w-[532px] px-9 w-full">
                 <Modal showModal={displayModal}>
                     <p className="text-lg text-white">Employee Created !</p>
@@ -170,6 +182,7 @@ const Home = () => {
 };
 
 export default Home;
+
 
 
 

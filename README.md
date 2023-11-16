@@ -729,3 +729,7 @@ export default BasicTable;
 $ npm i -D vitest
 $ npm i react-helmet @types/react-helmet react-helmet-async
 ```
+
+### 8. change Google lighthouse repport
+
+- update [Google lighthouse repport](lighthouse-repport)

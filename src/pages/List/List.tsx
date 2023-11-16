@@ -1,16 +1,8 @@
 
 import EmployeeTable from '../../components/employee/EmployeeTable';
 import { formatCustomDate } from '../../lib/utils';
+import { Helmet } from "react-helmet";
 
-// function formatCustomDate(dateString: string) {
-//     const date = new Date(dateString);
-//     const day = date.getDate();
-//     const month = date.getMonth() + 1; // Les mois sont indexés à partir de 0, donc on ajoute 1
-//     const year = date.getFullYear() % 100; // Obtenez les deux derniers chiffres de l'année
-
-//     // Formater la date
-//     return `${day}/${month}/${year}`;
-// }
 const List = () => {
 
     const employeesColumns = [
@@ -28,7 +20,6 @@ const List = () => {
             Header: "Start Date",
             accessorKey: "startDate",
             cell: ({ row }) => {
-                // console.log("🚀 ~ file: List.tsx:23 ~ List ~ date:", row.original.startDate)
                 return formatCustomDate(row.original.startDate);
             },
             footer: "ID",
@@ -37,7 +28,6 @@ const List = () => {
             Header: "Date of Birth",
             accessorKey: "dateOfBirth",
             cell: ({ row }) => {
-                // console.log("🚀 ~ file: List.tsx:23 ~ List ~ date:", row.original.startDate)
                 return formatCustomDate(row.original.dateOfBirth);
             },
             footer: "ID",
@@ -76,6 +66,17 @@ const List = () => {
 
     return (
         <div>
+            <Helmet>
+                <meta charSet="utf-8" />
+                <meta name="description" content="RHnet Employee List" />
+                <meta name="keywords" content="employees,employee form,employee list, lastName, firstName," />
+                <meta name="author" content="RHnet" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+                <meta name="robots" content="index, follow" />
+                <title>RHnet Employee List Page</title>
+                <link rel="canonical" href="http://localhost:5174/list" />
+            </Helmet>
             <EmployeeTable columns={employeesColumns} data={employees} />
         </div>
     )
